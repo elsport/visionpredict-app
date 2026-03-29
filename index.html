@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VisionPredict • Full System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        :root {
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #fbbf24;
+            --amber: #f59e0b;
+            --zinc-800: #27272a;
+            --zinc-900: #18181b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            line-height: 1.5;
+        }
+
+        .logo-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px 0;
+            border-bottom: 1px solid #27272a;
+        }
+
+        .header h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .promo-btn {
+            display: block;
+            width: 100%;
+            margin: 24px 16px 0;
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 18px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(251, 191, 36, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .promo-btn:active {
+            transform: scale(0.95);
+        }
+
+        .nav {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px;
+            margin: 24px 0 32px;
+        }
+
+        .nav button {
+            flex: 1;
+            padding: 18px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav .today {
+            background-color: #22c55e;
+            color: #000;
+        }
+
+        .nav .vip {
+            border: 2px solid #22c55e;
+            background: transparent;
+            color: #fff;
+        }
+
+        .nav .vip:hover {
+            background-color: rgba(34, 197, 94, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .free-tips {
+            color: #22c55e;
+        }
+
+        .live-header {
+            color: #ef4444;
+        }
+
+        .card {
+            background-color: #18181b;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 16px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .match-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            margin-bottom: 12px;
+        }
+
+        .live-dot {
+            color: #ef4444;
+            animation: blink 1.5s infinite;
+            font-weight: 700;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .score {
+            text-align: center;
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 16px;
+            border-radius: 9999px;
+            margin: 0 auto;
+        }
+
+        .refresh-btn {
+            background-color: #27272a;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background-color: #3f3f46;
+        }
+
+        .last-updated {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #71717a;
+            margin-top: 24px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #71717a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1 class="logo-font">VisionPredict</h1>
+        <p style="color:#a1a1aa; margin-top:4px; display:flex; align-items:center; justify-content:center; gap:6px;">
+            Winning is our habit 
+            <span style="color:#fbbf24;">💰</span>
+        </p>
+    </div>
+
+    <!-- BETWINNER PROMO -->
+    <button onclick="registerBetwinner()" class="promo-btn">
+        🔥 JOIN BETWINNER (CODE: THEGAME10)
+    </button>
+
+    <!-- NAV BUTTONS -->
+    <div class="nav">
+        <button onclick="goToPage('today.html')" class="today">TODAY'S TIPS</button>
+        <button onclick="goToPage('vip.html')" class="vip">VIP ACCESS</button>
+    </div>
+
+    <!-- FREE TIPS -->
+    <div class="section-header">
+        <h2 class="free-tips">FREE TIPS</h2>
+        <span style="font-size:0.75rem; background:rgba(34,197,94,0.2); color:#22c55e; padding:4px 12px; border-radius:9999px;">Updated now</span>
+    </div>
+
+    <div class="card">
+        <div class="match-teams">
+            <span style="font-weight:500;">Arsenal</span>
+            <span style="color:#a1a1aa;">15:00</span>
+            <span style="font-weight:500;">Chelsea</span>
+        </div>
+        <div style="text-align:center;">
+            <div style="color:#22c55e; font-size:1.75rem; font-weight:700;">Over 2.5 Goals</div>
+            <div style="font-size:0.75rem; color:#71717a; margin-top:4px;">Premier League • High Confidence</div>
+        </div>
+    </div>
+
+    <!-- LIVE MATCHES -->
+    <div class="section-header">
+        <h2 class="live-header" style="display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-bolt"></i> 
+            LIVE MATCHES
+        </h2>
+        <button onclick="loadLiveMatches()" class="refresh-btn" id="refreshBtn">
+            <i class="fas fa-sync-alt"></i>
+            <span id="refreshText">Refresh</span>
+        </button>
+    </div>
+
+    <div id="liveMatches" class="space-y-3"></div>
+
+    <div id="lastUpdated" class="last-updated"></div>
+
+    <script>
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        function registerBetwinner() {
+            const code = "THEGAME10";
+            navigator.clipboard.writeText(code).then(() => {
+                alert("✅ Promo code copied: " + code + "\n\nRedirecting to Betwinner...");
+            });
+            window.open("https://betwinner.com/?tag=d_12345", "_blank");
+        }
+
+        // Mock live matches (no API needed)
+        let mockMatches = [
+            { home: "Manchester City", away: "Liverpool", score: "2 - 1", minute: 67, status: "LIVE" },
+            { home: "Bayern Munich", away: "Borussia Dortmund", score: "3 - 2", minute: 81, status: "LIVE" },
+            { home: "Real Madrid", away: "Atletico Madrid", score: "0 - 0", minute: 34, status: "LIVE" },
+            { home: "PSG", away: "Monaco", score: "1 - 1", minute: 52, status: "LIVE" },
+            { home: "Inter Milan", away: "AC Milan", score: "2 - 0", minute: 89, status: "LIVE" }
+        ];
+
+        function loadLiveMatches() {
+            const container = document.getElementById('liveMatches');
+            const refreshText = document.getElementById('refreshText');
+            const lastUpdated = document.getElementById('lastUpdated');
+
+            refreshText.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+
+            container.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-futbol" style="font-size:3rem; opacity:0.3; margin-bottom:12px;"></i>
+                    <p>Loading live matches...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                container.innerHTML = "";
+
+                mockMatches.forEach(match => {
+                    const html = `
+                        <div class="card">
+                            <div class="match-teams">
+                                <span style="font-weight:500;">${match.home}</span>
+                                <span class="live-dot">${match.minute}'</span>
+                                <span style="font-weight:500;">${match.away}</span>
+                            </div>
+                            <div class="score">${match.score}</div>
+                            <div style="text-align:center;">
+                                <span class="status-pill">${match.status}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                });
+
+                lastUpdated.textContent = `Last updated: ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                refreshText.innerHTML = `<i class="fas fa-sync-alt"></i> Refresh`;
+            }, 600);
+        }
+
+        // Load on start + auto-refresh every 30 seconds
+        window.onload = () => {
+            loadLiveMatches();
+            setInterval(loadLiveMatches, 30000);
+        };
+
+let liveInterval; // store the interval ID
+
+// Function to load live matches and start interval
+function startLiveMatches() {
+    loadLiveMatches(); // load immediately
+    if (liveInterval) clearInterval(liveInterval); // clear any previous interval
+    liveInterval = setInterval(loadLiveMatches, 30000); // refresh every 30s
+}
+
+// Run when the page first loads
+window.onload = startLiveMatches;
+
+// Example GoToPage function
+function GoToPage(page) {
+    // 1. Load the new page content (AJAX or show/hide logic)
+    // Example: dynamically replace content
+    document.getElementById('content').innerHTML = `<h2>Loading ${page}...</h2>`;
+    
+    // 2. Refresh live matches for the new page
+    startLiveMatches(); // safely restart live matches
+}
+
+// Example function to fetch live matches
+function loadLiveMatches() {
+    // your actual API call or match fetching logic here
+    console.log("Live matches updated at " + new Date().toLocaleTimeString());
+}
+
+const express = require("express");
+const path = require("path");
+
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "public")));
+
+let users = {};
+
+// 💰 PAYMENT
+app.post("/pay", (req, res) => {
+    const { phone, method } = req.body;
+
+    if (!phone) {
+        return res.json({ success: false, message: "Enter phone number" });
+    }
+
+    // VIP = 24 hours
+    const expiry = Date.now() + (24 * 60 * 60 * 1000);
+
+    users[phone] = expiry;
+
+    console.log(`Payment by ${phone} via ${method}`);
+
+    res.json({
+        success: true,
+        message: "✅ Payment successful! VIP activated"
+    });
+});
+
+// 🔐 CHECK VIP
+app.post("/check-vip", (req, res) => {
+    const { phone } = req.body;
+
+    if (users[phone] && users[phone] > Date.now()) {
+        res.json({ vip: true });
+    } else {
+        res.json({ vip: false });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`🔥 Server running: http://localhost:${PORT}`);
+});
+
+app.post("/verify-payment", async (req, res) => {
+    const { tx_ref, phone } = req.body;
+
+    try {
+        const response = await axios.get(
+            `https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${tx_ref}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${SECRET_KEY}`
+                }
+            }
+        );
+
+        if (response.data.status === "success") {
+            const expiry = Date.now() + (24 * 60 * 60 * 1000);
+            users[phone] = expiry;
+
+            res.json({ vip: true });
+        } else {
+            res.json({ vip: false });
+        }
+
+    } catch (error) {
+        res.json({ vip: false });
+    }
+});
+
+
+
+</script>
+</body>
+</html>
