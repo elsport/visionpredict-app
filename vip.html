@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP Access</title>
+<style>
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    text-align: center;
+}
+.lock {
+    font-size: 80px;
+    margin-bottom: 10px;
+}
+.btn {
+    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    color: #000;
+    padding: 15px 30px;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn:active {
+    transform: scale(0.95);
+}
+#vip-content {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #fff;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background: #fbbf24;
+    color: #000;
+}
+#vip-expiry {
+    margin-top: 10px;
+    color: yellow;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<!-- LOCKED SECTION -->
+<div id="lock-section">
+    <div class="lock">🔒</div>
+    <h1>VIP ONLY</h1>
+    <p>Get High Accuracy Predictions</p>
+    <p>Daily Odds: 70+</p>
+    <div class="btn" onclick="payNow()">💰 UNLOCK VIP</div>
+    <p style="margin-top:10px;">After payment, VIP will be active automatically</p>
+    <a href="index.html" class="btn">⬅ Go Back</a>
+</div>
+
+<!-- VIP SECTION -->
+<div id="vip-content">
+    <h2 style="color:#fbbf24;">VIP Tips & Predictions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Match</th>
+                <th>Direct Win</th>
+                <th>Over 1.5</th>
+                <th>BTTS</th>
+            </tr>
+        </thead>
+        <tbody id="vip-table-body"></tbody>
+    </table>
+    <p id="vip-expiry"></p>
+    <a href="index.html" class="btn">⬅ Go Back</a>
+</div>
+
+<script>
+// Sample VIP data
+const vipTips = [
+    { date: '2026-03-29', match: 'Team A vs Team B', directWin: 'Team A', over15: 'Yes', btts: 'No' },
+    { date: '2026-03-29', match: 'Team C vs Team D', directWin: 'Draw', over15: 'Yes', btts: 'Yes' },
+    { date: '2026-03-30', match: 'Team E vs Team F', directWin: 'Team F', over15: 'No', btts: 'Yes' },
+    { date: '2026-03-30', match: 'Team G vs Team H', directWin: 'Team G', over15: 'Yes', btts: 'No' },
+];
+
+// Display VIP tips
+function displayVIPTips() {
+    const tbody = document.getElementById('vip-table-body');
+    tbody.innerHTML = '';
+    vipTips.forEach(tip => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${tip.date}</td>
+            <td>${tip.match}</td>
+            <td style="font-weight:bold; color:green;">${tip.directWin}</td>
+            <td>${tip.over15}</td>
+            <td>${tip.btts}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Simulate payment
+function payNow() {
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 3); // VIP valid for 3 days
+    localStorage.setItem('vipExpiry', expiryDate.toISOString());
+    checkVIPStatus();
+    alert("VIP unlocked! Valid until " + expiryDate.toDateString());
+}
+
+// Check VIP status
+function checkVIPStatus() {
+    const expiry = localStorage.getItem('vipExpiry');
+    if (expiry) {
+        const now = new Date();
+        const expiryDate = new Date(expiry);
+        if (now < expiryDate) {
+            document.getElementById('lock-section').style.display = 'none';
+            document.getElementById('vip-content').style.display = 'block';
+            displayVIPTips();
+            document.getElementById('vip-expiry').innerText = "VIP Access expires on: " + expiryDate.toDateString();
+            return;
+        } else {
+            localStorage.removeItem('vipExpiry');
+        }
+    }
+    document.getElementById('lock-section').style.display = 'block';
+    document.getElementById('vip-content').style.display = 'none';
+}
+
+// Run on page load
+checkVIPStatus();
+</script>
+
+</body>
+</html>
